@@ -153,7 +153,7 @@ export class AdminService {
         let updatedAdmin = { ...updateAdminDto };
         return {
             success: true,
-            data: updateAdminDto,
+            data: updatedAdmin,
         };
     }
 
