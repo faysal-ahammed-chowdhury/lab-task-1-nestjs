@@ -1,6 +1,7 @@
 import {
     IsAlpha,
     IsEmail,
+    IsNotEmpty,
     IsNumberString,
     IsPhoneNumber,
     IsString,
@@ -11,21 +12,26 @@ import {
 } from 'class-validator';
 
 export class CreateRiderDto {
+    @IsNotEmpty({ message: "can't be empty" })
     @IsString()
     @IsAlpha()
     name: string;
 
-    @IsEmail()
-    @Matches(/^[^\s@]+@[^\s@]+\.xyz$/)
+    @IsNotEmpty()
+    @IsEmail({}, { message: 'Must be a valid email' })
+    @Matches(/^.+@.+\.xyz$/, { message: 'must contain @ and .xyz' })
     email: string;
 
-    @MinLength(6, { message: 'Password Must be atleast 6 char' })
-    @MaxLength(8)
+    @IsNotEmpty()
+    @MinLength(6, { message: 'Password must be atleast 6 char' })
+    @MaxLength(8, { message: 'Password cannot exceed 8 char' })
     password: string;
 
-    @IsPhoneNumber('BD')
+    @IsNotEmpty()
+    @IsPhoneNumber('BD', { message: 'Must be a valid Bangladeshi Number' })
     phone: string;
 
+    @IsNotEmpty()
     @IsNumberString()
     @Length(10, 10)
     nid: string;

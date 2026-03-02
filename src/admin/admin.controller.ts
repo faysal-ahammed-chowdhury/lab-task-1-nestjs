@@ -1,13 +1,18 @@
 import {
+    BadRequestException,
     Body,
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpException,
+    HttpStatus,
     Param,
     Patch,
     Post,
     Put,
     Query,
+    Res,
     UploadedFile,
     UseInterceptors,
     UsePipes,
@@ -27,49 +32,6 @@ export class AdminController {
         private readonly adminService: AdminService,
         private readonly riderService: RiderService,
     ) {}
-
-    // Common
-    @Post('upload')
-    @UseInterceptors(
-        FileInterceptor('nid_img', {
-            fileFilter: (req, file, cb) => {
-                if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/))
-                    cb(null, true);
-                else {
-                    cb(
-                        new MulterError('LIMIT_UNEXPECTED_FILE', 'image'),
-                        false,
-                    );
-                }
-            },
-            limits: { fileSize: 2 * 1024 * 1024 },
-            storage: diskStorage({
-                destination: './uploads',
-                filename: function (req, file, cb) {
-                    cb(null, Date.now() + file.originalname);
-                },
-            }),
-        }),
-    )
-    uploadNid(@UploadedFile() file: Express.Multer.File): object {
-        // console.log(file);
-        // {
-        //     fieldname: 'nid_img',
-        //     originalname: 'logo.jpeg',
-        //     encoding: '7bit',
-        //     mimetype: 'image/jpeg',
-        //     destination: './uploads',
-        //     filename: '1772382419883logo.jpeg',
-        //     path: 'uploads\\1772382419883logo.jpeg',
-        //     size: 8884
-        // }
-
-        return {
-            success: true,
-            filenname: file.filename,
-            message: 'NID Uploaded Successfully',
-        };
-    }
 
     // Admin Management
     @Post('create-admin')
@@ -120,8 +82,53 @@ export class AdminController {
 
     // Rider Management
     @Post('create-rider')
-    @UsePipes(new ValidationPipe())
+    @UsePipes(new ValidationPipe({}))
     createRider(@Body() createRiderDto: CreateRiderDto): object {
         return this.riderService.createRider(createRiderDto);
+    }
+
+    @Post('upload-rider-nid')
+    @UseInterceptors(
+        FileInterceptor('nid_img', {
+            fileFilter: (req, file, cb) => {
+                if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/)) {
+                    cb(null, true);
+                } else {
+                    cb(new HttpException('Unexpected file', 400), false);
+                }
+            },
+            // limits: { fileSize: 2 * 1024 },
+            storage: diskStorage({
+                destination: './uploads',
+                filename: (req, file, cb) => {
+                    cb(null, Date.now() + file.originalname);
+                },
+            }),
+        }),
+    )
+    uploadRiderNid(@UploadedFile() file: Express.Multer.File): object {
+        // console.log(file);
+        // {
+        //     fieldname: 'nid_img',
+        //     originalname: 'logo.jpeg',
+        //     encoding: '7bit',
+        //     mimetype: 'image/jpeg',
+        //     destination: './uploads',
+        //     filename: '1772382419883logo.jpeg',
+        //     path: 'uploads\\1772382419883logo.jpeg',
+        //     size: 8884
+        // }
+
+        return {
+            success: true,
+            filenname: file.filename,
+            message: 'NID Uploaded Successfully',
+        };
+    }
+
+    // 1772480055697logo.jpeg
+    @Get('get-rider-nid/:name')
+    getRiderNid(@Param('name') filename: string, @Res() res) {
+        res.sendFile(filename, { root: './uploads' });
     }
 }
