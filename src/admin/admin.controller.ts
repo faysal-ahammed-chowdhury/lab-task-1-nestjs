@@ -1,12 +1,9 @@
 import {
-    BadRequestException,
     Body,
     Controller,
     Delete,
     Get,
-    HttpCode,
     HttpException,
-    HttpStatus,
     Param,
     Patch,
     Post,
@@ -18,13 +15,13 @@ import {
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
+import { CreateRiderDto } from './dto/create-rider.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { RiderService } from './rider.service';
-import { CreateRiderDto } from './dto/create-rider.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage, MulterError } from 'multer';
 
 @Controller('admin')
 export class AdminController {

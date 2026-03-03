@@ -1,11 +1,11 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 
 @Injectable()
 export class AdminService {
     create(createAdminDto: CreateAdminDto): object {
-        let createdAdmin = {
+        const createdAdmin = {
             id: '101',
             ...createAdminDto,
         };
@@ -150,7 +150,7 @@ export class AdminService {
                 message: 'Admin Not Found',
             };
         }
-        let updatedAdmin = { ...updateAdminDto };
+        const updatedAdmin = { ...updateAdminDto };
         return {
             success: true,
             data: updatedAdmin,

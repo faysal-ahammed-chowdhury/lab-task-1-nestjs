@@ -4,7 +4,7 @@ import { CreateRiderDto } from './dto/create-rider.dto';
 @Injectable()
 export class RiderService {
     createRider(createRiderDto: CreateRiderDto): object {
-        let createdRider = {
+        const createdRider = {
             id: '101',
             ...createRiderDto,
         };
