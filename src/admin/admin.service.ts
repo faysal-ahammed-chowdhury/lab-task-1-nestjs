@@ -37,7 +37,7 @@ export class AdminService {
     }
 
     getAdminById(id: string): object {
-        let myData: any = null;
+        let myData: object | null = null;
         if (id === '101') {
             myData = {
                 id: 101,
@@ -68,7 +68,7 @@ export class AdminService {
     }
 
     getAdminByEmail(email: string): object {
-        let myData: any = null;
+        let myData: object | null = null;
         if (email === 'faysal@gmail.com') {
             myData = {
                 id: 101,
@@ -99,7 +99,7 @@ export class AdminService {
     }
 
     getAdminByName(name: string): object {
-        let myData: any = null;
+        let myData: object | null = null;
         if (name === 'Faysal') {
             myData = {
                 id: 101,
@@ -107,7 +107,6 @@ export class AdminService {
                 email: 'faysal@gmail.com',
                 password: '1234',
             };
-            name;
         } else if (name == 'Shamin') {
             myData = {
                 id: '102',
